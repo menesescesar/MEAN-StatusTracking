@@ -1,0 +1,5 @@
+{
+    "DB_CON": "mongodb://<user>:<pass>@<url>:<port>/<database>",
+    
+    "TEST_DB_CON": "mongodb://<user>:<pass>@<url>:<port>/<database>"
+}

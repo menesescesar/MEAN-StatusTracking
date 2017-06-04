@@ -1,0 +1,21 @@
+{
+  "name": "meanstatustracking",
+  "version": "1.0.0",
+  "description": "MEAN Production Line Status Tracking - Lite",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test nodemon --exec mocha --recursive -R min",
+    "start": "nodemon index.js"
+  },
+  "author": "Cesar Meneses",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cors": "^2.8.3",
+    "cross-env": "^5.0.0",
+    "express": "^4.15.2",
+    "mocha": "^3.3.0",
+    "mongoose": "^4.9.7",
+    "nodemon": "^1.11.0"
+  }
+}
