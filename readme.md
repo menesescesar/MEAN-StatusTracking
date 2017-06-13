@@ -10,7 +10,10 @@ Configure mongoDB connection in config-example.json and rename it to config.json
 
 ### Usage
 
-    npm start
+    npm start    
+        
+    cd angular-src
+    ng serve
 
 ### Tests
 

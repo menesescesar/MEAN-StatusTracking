@@ -1,0 +1,194 @@
+<div class="col-md-12">
+  <div class="col-md-4 lines" style="border: 0px solid #eee">
+    <div class="col-md-12"><h4>Lines</h4></div>
+      <div class="col-md-12" style="overflow:auto;height:230px;">
+          <p-dataTable [value]="lines" selectionMode="single" [(selection)]="selectedLine" (onRowSelect)="onRowSelectLine($event)" [paginator]="false"  [responsive]="true">
+              <p-column field="name" header="name" [sortable]="true"></p-column>
+              <p-column field="description" header="description" [sortable]="true"></p-column>
+              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddLine()" label="Add">Add</button></div></p-footer>
+          </p-dataTable>
+      </div>
+
+      <p-dialog header="Line" [(visible)]="displayDialogLine" [responsive]="true" showEffect="fade" [modal]="true">
+          <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="line">
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">name</label></div>
+                  <div class="ui-grid-col-8"><input pInputText id="name" [(ngModel)]="line.name" /></div>
+              </div>
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="description">description</label></div>
+                  <div class="ui-grid-col-8"><input pInputText id="description" [(ngModel)]="line.description" /></div>
+              </div>
+          </div>
+          <p-footer>
+              <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                  <button type="button" pButton icon="fa-close" (click)="deleteLine()" label="Delete">Delete</button>
+                  <button type="button" pButton icon="fa-check" (click)="saveLine()" label="Save">Save</button>
+              </div>
+          </p-footer>
+      </p-dialog>
+  </div>
+  <div class="col-md-4 families" style="border: 0px solid #eee">
+    <div class="col-md-12"><h4>Product Families</h4></div>
+    <div class="col-md-12" style="overflow:auto;height:230px;">
+        <p-dataTable [value]="families" selectionMode="single" [(selection)]="selectedFamily" (onRowSelect)="onRowSelectFamily($event)" [paginator]="false"  [responsive]="true">
+          <p-column field="name" header="name" [sortable]="true"></p-column>
+          <p-column field="description" header="description" [sortable]="true"></p-column>
+          <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddFamily()" label="Add">Add</button></div></p-footer>
+        </p-dataTable>
+    </div>
+
+    <p-dialog header="Family Details" [(visible)]="displayDialogFamily" [responsive]="true" showEffect="fade" [modal]="true">
+      <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="family">
+          <div class="ui-grid-row">
+              <div class="ui-grid-col-4"><label for="name">name</label></div>
+              <div class="ui-grid-col-8"><input pInputText id="name" [(ngModel)]="family.name" /></div>
+          </div>
+          <div class="ui-grid-row">
+              <div class="ui-grid-col-4"><label for="description">description</label></div>
+              <div class="ui-grid-col-8"><input pInputText id="description" [(ngModel)]="family.description" /></div>
+          </div>
+      </div>
+      <p-footer>
+          <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+              <button type="button" pButton icon="fa-close" (click)="deleteFamily()" label="Delete">Delete</button>
+              <button type="button" pButton icon="fa-check" (click)="saveFamily()" label="Save">Save</button>
+          </div>
+      </p-footer>
+    </p-dialog>
+  </div>
+  <div class="col-md-4 products" style="border: 0px solid #eee">
+    <div class="col-md-12"><h4>Products</h4></div>
+      <div class="col-md-12" style="overflow:auto;height:230px;">
+          <p-dataTable [value]="products" selectionMode="single" [(selection)]="selectedProduct" (onRowSelect)="onRowSelectProduct($event)" [paginator]="false"  [responsive]="true">
+              <p-column field="name" header="name" [sortable]="true"></p-column>
+              <p-column field="productFamily" header="family" [sortable]="true">
+                  <ng-template let-product="rowData" pTemplate type="body">
+                      {{ productFamilyName(product.productFamily) }}
+                  </ng-template>
+              </p-column>
+              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddProduct()" label="Add">Add</button></div></p-footer>
+          </p-dataTable>
+      </div>
+
+      <p-dialog header="Product Details" [(visible)]="displayDialogProduct" [responsive]="true" showEffect="fade" [modal]="true">
+          <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="product">
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">name</label></div>
+                  <div class="ui-grid-col-8"><input style="width: 100%;" pInputText id="name" [(ngModel)]="product.name"/></div>
+              </div>
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">family</label></div>
+                  <div class="ui-grid-col-8">
+                      <select [(ngModel)]="product.productFamily"  class="form-control">
+                          <option *ngFor="let fam of families" value="{{fam._id}}">{{fam.name}}</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <p-footer>
+              <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                  <button type="button" pButton icon="fa-close" (click)="deleteProduct()" label="Delete">Delete</button>
+                  <button type="button" pButton icon="fa-check" (click)="saveProduct()" label="Save">Save</button>
+              </div>
+          </p-footer>
+      </p-dialog>
+  </div>
+  <div class="col-md-4 machinetypes" style="border: 0px solid #eee">
+    <div class="col-md-12"><h4>Machine Types</h4></div>
+      <div class="col-md-12" style="overflow:auto;height:230px;">
+          <p-dataTable [value]="types" selectionMode="single" [(selection)]="selectedType" (onRowSelect)="onRowSelectType($event)" [paginator]="false"  [responsive]="true">
+              <p-column field="name" header="name" [sortable]="true"></p-column>
+              <p-column field="description" header="description" [sortable]="true"></p-column>
+              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddType()" label="Add">Add</button></div></p-footer>
+          </p-dataTable>
+      </div>
+
+      <p-dialog header="Type Details" [(visible)]="displayDialogType" [responsive]="true" showEffect="fade" [modal]="true">
+          <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="type">
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">name</label></div>
+                  <div class="ui-grid-col-8"><input pInputText id="name" [(ngModel)]="type.name" /></div>
+              </div>
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="description">description</label></div>
+                  <div class="ui-grid-col-8"><input pInputText id="description" [(ngModel)]="type.description" /></div>
+              </div>
+          </div>
+          <p-footer>
+              <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                  <button type="button" pButton icon="fa-close" (click)="deleteType()" label="Delete">Delete</button>
+                  <button type="button" pButton icon="fa-check" (click)="saveType()" label="Save">Save</button>
+              </div>
+          </p-footer>
+      </p-dialog>
+  </div>
+  <div class="col-md-8 machines" style="border: 0px solid #eee">
+    <div class="col-md-12"><h4>Machines</h4></div>
+      <div class="col-md-12" style="overflow:auto;height:230px;">
+          <p-dataTable [value]="machines" selectionMode="single" [(selection)]="selectedMachine" (onRowSelect)="onRowSelectMachine($event)" [paginator]="false" [responsive]="true">
+              <p-column field="name" header="name" [sortable]="true"></p-column>
+              <p-column field="serialNumber" header="serial number" [sortable]="true"></p-column>
+              <p-column field="machineType" header="type" [sortable]="true">
+                  <ng-template let-machine="rowData" pTemplate type="body">
+                      {{ machineTypeName(machine.machineType) }}
+                  </ng-template>
+              </p-column>
+              <p-column field="previous" header="previous" [sortable]="true">
+                  <ng-template let-machine="rowData" pTemplate type="body" >
+                      {{ machineName(machine.previous) }}
+                  </ng-template>
+              </p-column>
+              <p-column field="line" header="Line" [sortable]="true">
+                  <ng-template let-machine="rowData" pTemplate type="body">
+                      {{ lineName(machine.line) }}
+                  </ng-template>
+              </p-column>
+              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddMachine()" label="Add">Add</button></div></p-footer>
+          </p-dataTable>
+          </div>
+      <p-dialog header="Machine Details" [(visible)]="displayDialogMachine" [responsive]="true" showEffect="fade" [modal]="true">
+          <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="machine">
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">name</label></div>
+                  <div class="ui-grid-col-8"><input style="width: 100%;" pInputText id="name" [(ngModel)]="machine.name"/></div>
+              </div>
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">serial</label></div>
+                  <div class="ui-grid-col-8"><input style="width: 100%;" pInputText id="serial" [(ngModel)]="machine.serialNumber"/></div>
+              </div>
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">type</label></div>
+                  <div class="ui-grid-col-8">
+                      <select [(ngModel)]="machine.machineType"  class="form-control">
+                          <option *ngFor="let type of types" value="{{type._id}}">{{type.name}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">line</label></div>
+                  <div class="ui-grid-col-8">
+                      <select [(ngModel)]="machine.line"  class="form-control">
+                          <option *ngFor="let line of lines" value="{{line._id}}">{{line.name}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-4"><label for="name">previous</label></div>
+                  <div class="ui-grid-col-8">
+                      <select [(ngModel)]="machine.previous"  class="form-control">
+                          <option value=''></option>
+                          <option *ngFor="let m of machines | notMachinePipe:machine._id" value="{{m._id}}">{{m.name}}</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <p-footer>
+              <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                  <button type="button" pButton icon="fa-close" (click)="deleteMachine()" label="Delete">Delete</button>
+                  <button type="button" pButton icon="fa-check" (click)="saveMachine()" label="Save">Save</button>
+              </div>
+          </p-footer>
+      </p-dialog>
+  </div>
+</div>
