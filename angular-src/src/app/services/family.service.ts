@@ -7,21 +7,22 @@ import {Family} from "../models/family.model";
 @Injectable()
 export class FamilyService {
   families: Family[];
+
+  private familiesURL = '/api/productfamilies/';
   private headers = new Headers({'Content-Type': 'application/json'});
 
   constructor(private _http:Http){ }
 
   loadFamilies(): Promise<Family[]> {
-    return this._http.get("/api/productfamilies")
+    return this._http.get(this.familiesURL)
         .toPromise()
         .then(response => this.families=response.json() as Family[])
         .catch(this.handleError);
   }
 
   update(family: Family): Promise<Family> {
-    const url = `/api/productfamilies/${family._id}`;
     return this._http
-        .put(url, JSON.stringify(family), {headers: this.headers})
+        .put(this.familiesURL+family._id, JSON.stringify(family), {headers: this.headers})
         .toPromise()
         .then(res => {
           return res.json() as Family;
@@ -31,7 +32,7 @@ export class FamilyService {
 
   create(family: Family): Promise<Family> {
     return this._http
-        .post("/api/productfamilies", JSON.stringify(family), {headers: this.headers})
+        .post(this.familiesURL, JSON.stringify(family), {headers: this.headers})
         .toPromise()
         .then(res => {
           return res.json() as Family;
@@ -40,8 +41,7 @@ export class FamilyService {
   }
 
   delete(id): Promise<void> {
-    const url = "/api/productfamilies/"+id;
-    return this._http.delete(url, {headers: this.headers})
+    return this._http.delete(this.familiesURL+id, {headers: this.headers})
         .toPromise()
         .then(() => {})
         .catch(this.handleError);

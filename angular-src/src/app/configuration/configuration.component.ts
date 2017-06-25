@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Ng2SmartTableModule, LocalDataSource} from 'ng2-smart-table';
-
 import {Machine} from "../models/machine.model";
 import {Type} from "../models/type.model";
 import {Family} from "../models/family.model";
 import {Product} from "../models/product.model";
 import {Line} from "../models/line.model";
-
 import {MachineService} from "../services/machine.service";
 import {LineService} from "../services/line.service";
 import {FamilyService} from "../services/family.service";
@@ -25,13 +22,12 @@ export class ConfigurationComponent implements OnInit {
   families: Family[];
   products: Product[];
 
-
-   constructor(private _machineService: MachineService,
-              private _lineService: LineService,
-              private _typeService: TypeService,
-              private _productService: ProductService,
-              private _familyService: FamilyService){
-  }
+    constructor(
+        private _machineService: MachineService,
+        private _lineService: LineService,
+        private _typeService: TypeService,
+        private _productService: ProductService,
+        private _familyService: FamilyService){}
 
     ngOnInit() {
         this.getMachines();
@@ -42,13 +38,24 @@ export class ConfigurationComponent implements OnInit {
     }
 
     getLines(){
-        this._lineService.loadLines().then(lines => {this.lines = lines;});
+        this._lineService.loadLines();
+        this._lineService.linesSource.subscribe((lines) => {
+            if(lines)
+                this.lines = [...lines]; // needs to be this way, for primefaces detect changes and apply to DOM
+        });
     }
     getMachines(){
-        this._machineService.loadMachines().then(machines => {this.machines = machines;});
+        this._machineService.loadMachines();
+        this._machineService.machinesSource.subscribe((machines) => {
+            this.machines = machines;
+        });
     }
     getProducts(){
-        this._productService.loadProducts().then(products => {this.products = products;});
+        this._productService.loadProducts();
+        this._productService.productsSource.subscribe((products) => {
+            if(products)
+                this.products = [...products];// needs to be this way, for primefaces detect changes and apply to DOM
+        });
     }
     getTypes(){
         this._typeService.loadTypes().then(types => {this.types = types;});
@@ -71,17 +78,13 @@ export class ConfigurationComponent implements OnInit {
     saveLine() {
         let lines = [...this.lines];
         if(this.newLine) {
-            this._lineService.create({
+            let line = this._lineService.create({
                 _id: null,
                 "name": this.line.name,
                 "description": this.line.description
-            })
-                .then(line => {
-                    lines.push(line);
-                    this.lines = lines;
-                    this.line = null;
-                    this.displayDialogLine = false;
-                });
+            });
+            this.line = null;
+            this.displayDialogLine = false;
         }
         else
         {
@@ -89,13 +92,9 @@ export class ConfigurationComponent implements OnInit {
                 _id:this.line._id,
                 "name": this.line.name,
                 "description": this.line.description
-            })
-                .then(line => {
-                    lines[this.findSelectedLineIndex()] = this.line;
-                    this.lines = lines;
-                    this.line = null;
-                    this.displayDialogLine = false;
-                });
+            });
+            this.line = null;
+            this.displayDialogLine = false;
         }
     }
     deleteLine() {
@@ -297,13 +296,9 @@ export class ConfigurationComponent implements OnInit {
                 _id: null,
                 "name": this.product.name,
                 "productFamily": this.product.productFamily
-            })
-                .then(product => {
-                    products.push(product);
-                    this.products = products;
-                    this.product = null;
-                    this.displayDialogProduct = false;
-                });
+            });
+            this.product = null;
+            this.displayDialogProduct = false;
         }
         else
         {
@@ -311,13 +306,9 @@ export class ConfigurationComponent implements OnInit {
                 _id:this.product._id,
                 "name": this.product.name,
                 "productFamily": this.product.productFamily
-            })
-                .then(product => {
-                    products[this.findSelectedProductIndex()] = this.product;
-                    this.products = products;
-                    this.product = null;
-                    this.displayDialogProduct = false;
-                });
+            });
+            this.product = null;
+            this.displayDialogProduct = false;
         }
     }
     deleteProduct() {
@@ -364,13 +355,9 @@ export class ConfigurationComponent implements OnInit {
                 "line": this.machine.line,
                 "previous": this.machine.previous,
                 "machineType": this.machine.machineType
-            })
-                .then(machine => {
-                    machines.push(machine);
-                    this.machines = machines;
-                    this.machine = null;
-                    this.displayDialogMachine = false;
-                });
+            });
+            this.machine = null;
+            this.displayDialogMachine = false;
         }
         else
         {
@@ -381,13 +368,9 @@ export class ConfigurationComponent implements OnInit {
                 "line": this.machine.line,
                 "previous": this.machine.previous,
                 "machineType": this.machine.machineType
-            })
-                .then(machine => {
-                    machines[this.findSelectedMachineIndex()] = this.machine;
-                    this.machines = machines;
-                    this.machine = null;
-                    this.displayDialogMachine = false;
-                });
+            });
+            this.machine = null;
+            this.displayDialogMachine = false;
         }
     }
     deleteMachine() {

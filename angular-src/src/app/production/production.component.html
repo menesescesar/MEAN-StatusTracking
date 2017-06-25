@@ -1,0 +1,52 @@
+<div class="col-md-12">
+
+  <div class="col-md-6 lines line-box" *ngFor="let line of lines">
+      <div class="col-md-12 textcenter"><h4><b><i class="fa fa-industry" aria-hidden="true"></i></b> {{line.name}}</h4></div>
+    <div class="col-md-12 machine-box" *ngFor="let machine of machines | lineMachinePipe:line._id; let i = index;">
+
+        <div class="col-md-12 textcenter"><b><i class="fa fa-cogs" aria-hidden="true"></i></b> {{ machine.name }}</div>
+        <div class="col-md-3 color-green">On Buffer:{{ productions | productionMachineStatusPipe:machine._id:null }}</div>
+        <div class="col-md-3 color-red">Scrap:{{ productions | productionMachineStatusPipe:machine._id:'SCRAP' }}</div>
+        <div class="col-md-3 color-yellow">Rework:{{ productions | productionMachineStatusPipe:machine._id:'REWORK' }}</div>
+        <div class="col-md-3 color-green">Ok:{{ productions | productionMachineStatusPipe:machine._id:'OK' }}</div>
+        <button type="button" class="btn btn-primary" (click)="work( machine._id, line._id )" #btncollapse>Work</button>
+        <button type="button" class="btn btn-primary pull-right" *ngIf="i==0" (click)="new( machine._id, line._id )" #btncollapse>New</button>
+    </div>
+  </div>
+    <p-dialog header="Production Details" [(visible)]="displayDialogProduction" [responsive]="true" showEffect="fade" [modal]="true">
+      <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="production">
+          <div class="ui-grid-row">
+              <div class="ui-grid-col-12"><label>Product</label></div>
+          </div>
+          <div class="ui-grid-row">
+              <div class="ui-grid-col-12" *ngIf="!newProduction">
+                  <select [(ngModel)]="selectedProduction" class="form-control">
+                      <option *ngFor="let prod of productions | productionMachinePipe:selectedMachine" value="{{prod._id}}">{{prod.product.name}} | {{prod.productSerial}}</option>
+                  </select>
+              </div>
+              <div class="ui-grid-col-12" *ngIf="newProduction">
+                  <select [(ngModel)]="selectedProduct" class="form-control">
+                      <option *ngFor="let prod of products" value="{{prod._id}}">{{prod.name}}</option>
+                  </select>
+              </div>
+          </div>
+          <div class="ui-grid-row" *ngIf="newProduction">
+              <div class="ui-grid-col-4"><label for="serial">serial</label></div>
+              <div class="ui-grid-col-8"><input width="100%" pInputText id="serial" [(ngModel)]="production.productSerial"/></div>
+          </div>
+      </div>
+      <p-footer>
+          <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" *ngIf="!newProduction">
+              <p>Since we dont have an external signal to change the outcome of production,<br> it needs to be done manually. Status:</p>
+              <button type="button" pButton icon="fa-check" (click)="saveProduction('OK')" label="Ok">OK</button>
+              <button type="button" pButton icon="fa-check" (click)="saveProduction('SCRAP')" label="Scrap">Scrap</button>
+              <button type="button" pButton icon="fa-check" (click)="saveProduction('REWORK')" label="Rework">Rework</button>
+          </div>
+          <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" *ngIf="newProduction">
+              <button type="button" pButton icon="fa-check" (click)="saveNew()" label="Ok">Ok</button>
+          </div>
+      </p-footer>
+    </p-dialog>
+</div>
+
+

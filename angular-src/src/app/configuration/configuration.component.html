@@ -1,11 +1,11 @@
 <div class="col-md-12">
-  <div class="col-md-4 lines" style="border: 0px solid #eee">
+  <div class="col-md-4 lines">
     <div class="col-md-12"><h4>Lines</h4></div>
-      <div class="col-md-12" style="overflow:auto;height:230px;">
+      <div class="col-md-12 config-box">
           <p-dataTable [value]="lines" selectionMode="single" [(selection)]="selectedLine" (onRowSelect)="onRowSelectLine($event)" [paginator]="false"  [responsive]="true">
               <p-column field="name" header="name" [sortable]="true"></p-column>
               <p-column field="description" header="description" [sortable]="true"></p-column>
-              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddLine()" label="Add">Add</button></div></p-footer>
+              <p-footer><div class="ui-helper-clearfix" width="100%"><button type="button" pButton icon="fa-plus" class="pull-left" (click)="showDialogToAddLine()" label="Add">Add</button></div></p-footer>
           </p-dataTable>
       </div>
 
@@ -28,13 +28,13 @@
           </p-footer>
       </p-dialog>
   </div>
-  <div class="col-md-4 families" style="border: 0px solid #eee">
+  <div class="col-md-4 families">
     <div class="col-md-12"><h4>Product Families</h4></div>
-    <div class="col-md-12" style="overflow:auto;height:230px;">
+    <div class="col-md-12 config-box">
         <p-dataTable [value]="families" selectionMode="single" [(selection)]="selectedFamily" (onRowSelect)="onRowSelectFamily($event)" [paginator]="false"  [responsive]="true">
           <p-column field="name" header="name" [sortable]="true"></p-column>
           <p-column field="description" header="description" [sortable]="true"></p-column>
-          <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddFamily()" label="Add">Add</button></div></p-footer>
+          <p-footer><div class="ui-helper-clearfix" width="100%"><button type="button" pButton icon="fa-plus" class="pull-left" (click)="showDialogToAddFamily()" label="Add">Add</button></div></p-footer>
         </p-dataTable>
     </div>
 
@@ -57,9 +57,9 @@
       </p-footer>
     </p-dialog>
   </div>
-  <div class="col-md-4 products" style="border: 0px solid #eee">
+  <div class="col-md-4 products">
     <div class="col-md-12"><h4>Products</h4></div>
-      <div class="col-md-12" style="overflow:auto;height:230px;">
+      <div class="col-md-12 config-box">
           <p-dataTable [value]="products" selectionMode="single" [(selection)]="selectedProduct" (onRowSelect)="onRowSelectProduct($event)" [paginator]="false"  [responsive]="true">
               <p-column field="name" header="name" [sortable]="true"></p-column>
               <p-column field="productFamily" header="family" [sortable]="true">
@@ -67,7 +67,7 @@
                       {{ productFamilyName(product.productFamily) }}
                   </ng-template>
               </p-column>
-              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddProduct()" label="Add">Add</button></div></p-footer>
+              <p-footer><div class="ui-helper-clearfix" width="100%"><button type="button" pButton icon="fa-plus" class="pull-left" (click)="showDialogToAddProduct()" label="Add">Add</button></div></p-footer>
           </p-dataTable>
       </div>
 
@@ -75,7 +75,7 @@
           <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="product">
               <div class="ui-grid-row">
                   <div class="ui-grid-col-4"><label for="name">name</label></div>
-                  <div class="ui-grid-col-8"><input style="width: 100%;" pInputText id="name" [(ngModel)]="product.name"/></div>
+                  <div class="ui-grid-col-8"><input width="100%" pInputText id="name" [(ngModel)]="product.name"/></div>
               </div>
               <div class="ui-grid-row">
                   <div class="ui-grid-col-4"><label for="name">family</label></div>
@@ -94,13 +94,13 @@
           </p-footer>
       </p-dialog>
   </div>
-  <div class="col-md-4 machinetypes" style="border: 0px solid #eee">
+  <div class="col-md-4 machinetypes">
     <div class="col-md-12"><h4>Machine Types</h4></div>
-      <div class="col-md-12" style="overflow:auto;height:230px;">
+      <div class="col-md-12 config-box">
           <p-dataTable [value]="types" selectionMode="single" [(selection)]="selectedType" (onRowSelect)="onRowSelectType($event)" [paginator]="false"  [responsive]="true">
               <p-column field="name" header="name" [sortable]="true"></p-column>
               <p-column field="description" header="description" [sortable]="true"></p-column>
-              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddType()" label="Add">Add</button></div></p-footer>
+              <p-footer><div class="ui-helper-clearfix" width="100%"><button type="button" pButton icon="fa-plus" class="pull-left" (click)="showDialogToAddType()" label="Add">Add</button></div></p-footer>
           </p-dataTable>
       </div>
 
@@ -123,9 +123,9 @@
           </p-footer>
       </p-dialog>
   </div>
-  <div class="col-md-8 machines" style="border: 0px solid #eee">
+  <div class="col-md-8 machines">
     <div class="col-md-12"><h4>Machines</h4></div>
-      <div class="col-md-12" style="overflow:auto;height:230px;">
+      <div class="col-md-12 config-box">
           <p-dataTable [value]="machines" selectionMode="single" [(selection)]="selectedMachine" (onRowSelect)="onRowSelectMachine($event)" [paginator]="false" [responsive]="true">
               <p-column field="name" header="name" [sortable]="true"></p-column>
               <p-column field="serialNumber" header="serial number" [sortable]="true"></p-column>
@@ -144,18 +144,18 @@
                       {{ lineName(machine.line) }}
                   </ng-template>
               </p-column>
-              <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAddMachine()" label="Add">Add</button></div></p-footer>
+              <p-footer><div class="ui-helper-clearfix" width="100%"><button type="button" pButton icon="fa-plus" class="pull-left" (click)="showDialogToAddMachine()" label="Add">Add</button></div></p-footer>
           </p-dataTable>
           </div>
       <p-dialog header="Machine Details" [(visible)]="displayDialogMachine" [responsive]="true" showEffect="fade" [modal]="true">
           <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="machine">
               <div class="ui-grid-row">
                   <div class="ui-grid-col-4"><label for="name">name</label></div>
-                  <div class="ui-grid-col-8"><input style="width: 100%;" pInputText id="name" [(ngModel)]="machine.name"/></div>
+                  <div class="ui-grid-col-8"><input width="100%" pInputText id="name" [(ngModel)]="machine.name"/></div>
               </div>
               <div class="ui-grid-row">
                   <div class="ui-grid-col-4"><label for="name">serial</label></div>
-                  <div class="ui-grid-col-8"><input style="width: 100%;" pInputText id="serial" [(ngModel)]="machine.serialNumber"/></div>
+                  <div class="ui-grid-col-8"><input width="100%" pInputText id="serial" [(ngModel)]="machine.serialNumber"/></div>
               </div>
               <div class="ui-grid-row">
                   <div class="ui-grid-col-4"><label for="name">type</label></div>

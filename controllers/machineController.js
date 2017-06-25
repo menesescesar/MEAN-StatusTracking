@@ -20,6 +20,8 @@ module.exports = {
 
 	store(req, res, next){
 		const machineProps = req.body;
+		const listAllMachines = req.query.list == 'all' ? true : false;
+
 		delete machineProps._id;
 		if(machineProps.previous && machineProps.previous!=null) 
 		{
@@ -40,8 +42,13 @@ module.exports = {
 								.then(machine => {
 									//update its previous
 									OtherMachine.previous = machine._id;
-									OtherMachine.save();	
-									res.status(201).send(machine);
+									OtherMachine.save();
+									if(listAllMachines){
+										Machine.find({}, (err,machines) => res.status(201).send(machines)).catch(next);
+									}
+									else {
+									  	res.status(201).send(machine);
+                                    }
 								})
 								.catch(next);
 							}
@@ -49,7 +56,12 @@ module.exports = {
 							{
 								Machine.create(machineProps)
 								.then(machine => {
-									res.status(201).send(machine);
+									if(listAllMachines){
+                                        Machine.find({}, (err,machines) => res.status(201).send(machines)).catch(next);
+									}
+                                	else {
+                                    	res.status(201).send(machine);
+                    				}
 								})
 								.catch(next);
 							}
@@ -79,11 +91,26 @@ module.exports = {
 					if(OtherMachine)
 					{
 						OtherMachine.previous = machine._id;
-						OtherMachine.save().then(m => 
-							res.status(201).send(machine));
+						OtherMachine.save().then(m => {
+
+                            if(listAllMachines){
+                                Machine.find({}, (err,machines) => res.status(201).send(machines)).catch(next);
+                            }
+                            else {
+                                res.status(201).send(machine);
+							}
+                    	})
+						.catch(next);
 					}
 					else
-						res.status(201).send(machine)
+					{
+                        if(listAllMachines){
+                            Machine.find({}, (err,machines) => res.status(201).send(machines)).catch(next);
+                        }
+                        else {
+                            res.status(201).send(machine);
+        				}
+					}
 				})
 				.catch(next);	
 				
@@ -95,6 +122,8 @@ module.exports = {
 	update(req, res, next){
 		const machineId = req.params.id;
 		const machineProps = req.body;
+        const listAllMachines = req.query.list == 'all' ? true : false;
+
 		delete machineProps._id;
 		if(machineProps.previous)
 		{
@@ -108,15 +137,15 @@ module.exports = {
 					{
 						//verify if other machine have this previous machine
 						Machine.findOne({ previous:machineProps.previous })
-						.then(OtherMachine => {	
-							if(OtherMachine)
-							{
+						.then(OtherMachine => {
 								Machine.findById({ _id:machineId })
 								.then(machine => {
-									//update its previous
-									OtherMachine.previous = machine._id;
-									OtherMachine.save();	
-
+                                    if(OtherMachine)
+                                    {
+                                        //update its previous
+                                        OtherMachine.previous = machine._id;
+                                        OtherMachine.save();
+                                    }
 									//verify if this machine has reference
 									Machine.findOne({ previous:machineId })
 									.then(RefMachine => {
@@ -129,14 +158,18 @@ module.exports = {
 										//finaly update machine
 										Machine.findByIdAndUpdate({ _id:machineId },machineProps)
 										.then(machine => {
-											res.status(201).send(machine);
+											if(listAllMachines){
+												Machine.find({}, (err,machines) => res.status(201).send(machines)).catch(next);
+											}
+											else {
+												res.status(201).send(machine);
+											}
 										})
 										.catch(next);
 									})
 									.catch(next);
 								})
 								.catch(next);
-							}
 						})
 						.catch(next);						
 					}
@@ -179,7 +212,12 @@ module.exports = {
 						//finaly update machine
 						Machine.findByIdAndUpdate({ _id:machineId },machineProps)
 						.then(machine => {
-							res.status(201).send(machine);
+							if(listAllMachines){
+								Machine.find({}, (err,machines) => res.status(201).send(machines)).catch(next);
+							}
+							else {
+								res.status(201).send(machine);
+							}
 						})
 						.catch(next);
 					})
@@ -193,6 +231,8 @@ module.exports = {
 
 	destroy(req, res, next){
 		const machineId = req.params.id;
+        const listAllMachines = req.query.list == 'all' ? true : false;
+
 		Machine.findByIdAndRemove({ _id:machineId })
 		.then(machine => {
 			//find if some machine have this as previous
@@ -203,7 +243,13 @@ module.exports = {
 					OtherMachine.previous = (machine.previous) ? machine.previous : null;
 					OtherMachine.save();
 				}
-				res.status(204).send(machine);
+
+				if(listAllMachines){
+					Machine.find({}, (err,machines) => res.status(201).send(machines)).catch(next);
+				}
+				else {
+					res.status(204).send(machine);
+				}
 			})
 			.catch(next);
 		})

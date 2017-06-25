@@ -8,20 +8,19 @@ import {Type} from "../models/type.model";
 export class TypeService {
   types: Type[];
   private headers = new Headers({'Content-Type': 'application/json'});
-
+  private typesURL = '/api/machineTypes/';
   constructor(private _http:Http){ }
 
   loadTypes(): Promise<Type[]> {
-    return this._http.get("/api/machineTypes")
+    return this._http.get(this.typesURL)
         .toPromise()
         .then(response => this.types=response.json() as Type[])
         .catch(this.handleError);
   }
 
   update(type: Type): Promise<Type> {
-    const url = `/api/machineTypes/${type._id}`;
     return this._http
-        .put(url, JSON.stringify(type), {headers: this.headers})
+        .put(this.typesURL+type._id, JSON.stringify(type), {headers: this.headers})
         .toPromise()
         .then(res => {
           return res.json() as Type;
@@ -31,7 +30,7 @@ export class TypeService {
 
   create(type: Type): Promise<Type> {
     return this._http
-        .post("/api/machineTypes", JSON.stringify(type), {headers: this.headers})
+        .post(this.typesURL, JSON.stringify(type), {headers: this.headers})
         .toPromise()
         .then(res => {
           return res.json() as Type;
@@ -40,8 +39,7 @@ export class TypeService {
   }
 
   delete(id): Promise<void> {
-    const url = "/api/machineTypes/"+id;
-    return this._http.delete(url, {headers: this.headers})
+    return this._http.delete(this.typesURL+id, {headers: this.headers})
         .toPromise()
         .then(() => {})
         .catch(this.handleError);

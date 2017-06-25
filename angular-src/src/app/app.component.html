@@ -1,4 +1,11 @@
-<div class="col-md-12"><h2>{{title}}</h2></div>
-<app-configuration></app-configuration>
+<div class="col-md-12 textcenter"><h2>{{title}}</h2></div>
 
+<div class="col-md-12">
+    <button type="button" class="btn btn-primary" (click)="togCollapse()" #btncollapse>Open Configuration</button>
 
+    <div class="card card-block card-header block" [style.height]="height + 'px'" #collapsible>
+        <app-configuration></app-configuration>
+    </div>
+</div>
+
+<app-production></app-production>

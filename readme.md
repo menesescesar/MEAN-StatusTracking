@@ -13,7 +13,8 @@ Configure mongoDB connection in config-example.json and rename it to config.json
     npm start    
         
     cd angular-src
-    ng serve
+    ng build
+    http://localhost:3000
 
 ### Tests
 

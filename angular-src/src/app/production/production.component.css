@@ -1,0 +1,26 @@
+.color-red {
+    color: lightcoral;
+}
+
+.color-yellow {
+    color: darkgoldenrod;
+}
+
+.color-green {
+    color: olivedrab;
+}
+
+.textcenter{
+    text-align: center;
+}
+
+.line-box{
+    border: 1px solid #eee;
+    height:200px;
+    overflow: auto;
+}
+
+.machine-box{
+    height:100px;
+}
+

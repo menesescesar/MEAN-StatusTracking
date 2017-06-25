@@ -6,12 +6,14 @@ module.exports = {
 
 	index(req, res, next){
 		Production.find({}, (err,productions) => res.status(200).send(productions))
+        .populate({path:'product'})
 		.catch(next);
 	},
 
 	show(req, res, next){
 		const productionId = req.params.id;
 		Production.findById({ _id:productionId })
+		.populate({path:'product'})
 		.then(production => res.status(200).send(production))
 		.catch(next);
 	},
@@ -27,7 +29,11 @@ module.exports = {
 			if( !machine || machine.previous == null)
 			{
 				Production.create(productionProps)
-				.then(production => res.status(201).send(production))
+				.then(production => {
+                    Production.findById({ _id:production._id })
+                    .populate({path:'product'})
+                    .then(production => res.status(200).send(production))
+				})
 				.catch(next);
 			}
 			else
@@ -64,20 +70,24 @@ module.exports = {
 						newProductionProps.status = null;
 
 						Production.create(newProductionProps)
-						.then(newProduction => res.status(201).send(newProduction))
+						.then(newProduction => {
+                            Production.findById({ _id:newProduction._id })
+                            .populate({path:'product'})
+                            .then(production => res.status(200).send(production))
+                    	})
 						.catch(next);
 					}
 					else
 					{
 						//this is the last machine
-						res.status(201);
+						res.status(201).send(null);
 					}
 				});
 			}
 			else
 			{
 				//there was other status[SCRAP,REWORK]
-				res.status(201);
+				res.status(201).send(production);
 			}
 		})
 		.catch(next);

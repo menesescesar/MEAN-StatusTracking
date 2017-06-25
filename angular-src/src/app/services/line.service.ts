@@ -1,54 +1,59 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from "@angular/http";
 import 'rxjs/add/operator/toPromise';
-
+import {BehaviorSubject} from "rxjs";
 import {Line} from "../models/line.model";
 
 @Injectable()
-export class LineService{
+export class LineService {
   lines: Line[];
+  linesSource: BehaviorSubject<any> = new BehaviorSubject(null);
+
+  private linesURL = '/api/lines/';
   private headers = new Headers({'Content-Type': 'application/json'});
 
-  constructor(private _http:Http){ }
-
-  loadLines(): Promise<Line[]> {
-    return this._http.get("/api/lines")
-        .toPromise()
-        .then(response => this.lines=response.json() as Line[])
-        .catch(this.handleError);
+  constructor(private _http: Http) {
   }
 
-  update(line: Line): Promise<Line> {
-    const url = `/api/lines/${line._id}`;
+  loadLines() {
+    return this._http.get(this.linesURL)
+        .map(response => this.lines = response.json() as Line[])
+        .subscribe((lines) => this.linesSource.next(this.lines));
+  }
+
+  update(line: Line) {
     return this._http
-        .put(url, JSON.stringify(line), {headers: this.headers})
-        .toPromise()
-        .then(res => {
+        .put(this.linesURL+line._id, JSON.stringify(line), {headers: this.headers})
+        .map(res => {
+          for(let i in this.lines)
+          {
+            if(this.lines[i]._id == line._id){
+              this.lines[i]=line;
+              break;
+            }
+          }
+
+          return line;
+        })
+        .subscribe((lines) => this.linesSource.next(this.lines));
+  }
+
+  create(line: Line) {
+    return this._http
+        .post(this.linesURL, JSON.stringify(line), {headers: this.headers})
+        .map(res => {
+          this.lines.push(res.json());
           return res.json() as Line;
         })
-        .catch(this.handleError);
+        .subscribe((lines) => this.linesSource.next(this.lines));
   }
 
-  create(line: Line): Promise<Line> {
-    return this._http
-        .post("/api/lines", JSON.stringify(line), {headers: this.headers})
-        .toPromise()
-        .then(res => {
-          return res.json() as Line;
+  delete(id) {
+    return this._http.delete(this.linesURL + id, {headers: this.headers})
+        .map(res => {
+          this.lines = this.lines.filter((val,i) => val._id!=id);
+          return res.json() as Line[];
         })
-        .catch(this.handleError);
-  }
-
-  delete(id): Promise<void> {
-    const url = "/api/lines/"+id;
-    return this._http.delete(url, {headers: this.headers})
-        .toPromise()
-        .then(() => {})
-        .catch(this.handleError);
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
+        .subscribe((lines) => this.linesSource.next(this.lines));
   }
 }

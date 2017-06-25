@@ -20,12 +20,21 @@ import {MenuItem} from 'primeng/components/common/api';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {notMachinePipe} from './pipes/notMachinePipe';
+import {lineMachinePipe} from './pipes/lineMachinePipe';
+import {productionMachinePipe} from './pipes/productionMachinePipe';
+import { ProductionComponent } from './production/production.component';
+import {ProductionService} from "./services/production.service";
+import {productionMachineStatusPipe} from "./pipes/productionMachineStatusPipe";
 
 @NgModule({
   declarations: [
     AppComponent,
     ConfigurationComponent,
-    notMachinePipe
+    notMachinePipe,
+    lineMachinePipe,
+    productionMachinePipe,
+    productionMachineStatusPipe,
+    ProductionComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +47,7 @@ import {notMachinePipe} from './pipes/notMachinePipe';
     AccordionModule,
     BrowserAnimationsModule
   ],
-  providers: [MachineService,ProductService,LineService,TypeService,FamilyService],
+  providers: [MachineService,ProductService,LineService,TypeService,FamilyService,ProductionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
